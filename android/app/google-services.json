@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1082187745439",
+    "project_id": "surethingnet",
+    "storage_bucket": "surethingnet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082187745439:android:fb2183da07b15469237aaa",
+        "android_client_info": {
+          "package_name": "com.surethingnet.stn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBcQ9Jao-1QhBHKtpRuRz_DC-dOzeASsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
