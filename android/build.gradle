@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        # Force Gradle to load Android Gradle Plugin version 8.9.1
+        classpath 'com.android.tools.build:gradle:8.9.1'
+        # Force Kotlin Gradle Plugin version 1.9.22
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+        # Google Services plugin for Firebase config
+        classpath 'com.google.gms:google-services:4.4.1'
+    }
+}
+
 allprojects {
     repositories {
         google()
