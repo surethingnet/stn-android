@@ -18,7 +18,6 @@ jobs:
       - name: Stop Gradle Daemon
         shell: pwsh
         run: |
-          # Stop any running Gradle daemons on the host to clear plugin version caches
           if (Test-Path android/gradlew.bat) {
             cd android
             ./gradlew.bat --stop
@@ -32,5 +31,17 @@ jobs:
       - name: Deploy to Phone
         shell: pwsh
         run: |
-          # Use adb -d to target the connected physical/wireless device and install the built APK
-          adb -d install -r build/app/outputs/flutter-apk/app-debug.apk
+          # List all active devices and print them for diagnostics
+          adb devices
+          
+          # Parse active devices (filtering out header and offline devices)
+          $deviceLines = adb devices | Select-String -Pattern "\bdevice\b"
+          if ($deviceLines.Count -eq 0) {
+            Write-Error "No connected ADB devices/emulators found! Please ensure your phone is connected via USB or wireless debugging."
+            exit 1
+          }
+          
+          # Target the first active device found
+          $deviceId = ($deviceLines[0].Line -split "`t")[0].Trim()
+          Write-Host "Targeting active device: $deviceId"
+          adb -s $deviceId install -r build/app/outputs/flutter-apk/app-debug.apk
