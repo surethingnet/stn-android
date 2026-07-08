@@ -23,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _isWifiConnected = true;
+  String? _wifiName;
   final TextEditingController _emailController = TextEditingController();
 
   @override
@@ -35,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _isWifiConnected = isWifi;
         });
+        _fetchWifiName();
       }
     });
   }
@@ -44,6 +46,24 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _isWifiConnected = isWifi;
     });
+    _fetchWifiName();
+  }
+
+  Future<void> _fetchWifiName() async {
+    if (_isWifiConnected) {
+      final name = await widget.connectivityService.getWifiName();
+      if (mounted) {
+        setState(() {
+          _wifiName = name;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _wifiName = null;
+        });
+      }
+    }
   }
 
   Future<void> _launchUrl(String url) async {
@@ -272,6 +292,49 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ],
+          ),
+          const Divider(height: 32, color: Color(0xFF2C2C2C)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.wifi_tethering_rounded,
+                    size: 16,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Audit Connection:',
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2A2A2A),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFF3A3A3A),
+                    width: 0.5,
+                  ),
+                ),
+                child: Text(
+                  _wifiName ?? 'Scanning SSID...',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.2,
+                  ),
                 ),
               ),
             ],

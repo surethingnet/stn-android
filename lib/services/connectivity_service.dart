@@ -1,17 +1,18 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:network_info_plus/network_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ConnectivityService {
   final Connectivity _connectivity = Connectivity();
+  final NetworkInfo _networkInfo = NetworkInfo();
 
   /// Stream of Wi-Fi connection status. 
   /// Returns `true` if connected to Wi-Fi, `false` otherwise.
   Stream<bool> get isWifiStream {
     return _connectivity.onConnectivityChanged.map((dynamic results) {
-      // In connectivity_plus v5.0.0+, it returns List<ConnectivityResult>.
       if (results is List) {
         return results.contains(ConnectivityResult.wifi);
       }
-      // Fallback for older versions where it returns a single ConnectivityResult.
       return results == ConnectivityResult.wifi;
     });
   }
@@ -23,5 +24,33 @@ class ConnectivityService {
       return results.contains(ConnectivityResult.wifi);
     }
     return results == ConnectivityResult.wifi;
+  }
+
+  /// Retrieves the current Wi-Fi name (SSID).
+  /// Requires Location permission on Android/iOS.
+  Future<String?> getWifiName() async {
+    if (!await isConnectedToWifi()) {
+      return null;
+    }
+
+    // Request Location permissions if not already granted
+    var status = await Permission.locationWhenInUse.status;
+    if (status.isDenied) {
+      status = await Permission.locationWhenInUse.request();
+    }
+
+    if (status.isGranted) {
+      try {
+        final wifiName = await _networkInfo.getWifiName();
+        // The SSID returned can sometimes be surrounded by double quotes (e.g. '"HomeNetwork"')
+        if (wifiName != null) {
+          return wifiName.replaceAll('"', '');
+        }
+        return wifiName;
+      } catch (e) {
+        return 'Unknown Wi-Fi';
+      }
+    }
+    return 'Permission Denied (Cannot read SSID)';
   }
 }
