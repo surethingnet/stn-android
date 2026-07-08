@@ -1,4 +1,4 @@
-package com.surethingnet.stn_temp
+package com.surethingnet.stn
 
 import io.flutter.embedding.android.FlutterActivity
 
