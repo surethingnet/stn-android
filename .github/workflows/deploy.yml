@@ -15,6 +15,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Stop Gradle Daemon
+        shell: pwsh
+        run: |
+          # Stop any running Gradle daemons on the host to clear plugin version caches
+          if (Test-Path android/gradlew.bat) {
+            cd android
+            ./gradlew.bat --stop
+          }
+
       - name: Build Debug APK
         shell: pwsh
         run: |
