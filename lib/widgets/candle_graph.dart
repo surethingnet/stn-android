@@ -58,7 +58,7 @@ class CandleGraph extends StatelessWidget {
 
         // The Candle Graph Bar
         Stack(
-          alignment: Alignment.centerY,
+          alignment: Alignment.center,
           children: [
             // Track bar with smooth gradient
             Container(

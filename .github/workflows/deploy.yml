@@ -1,0 +1,25 @@
+name: Build and Deploy to Phone
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Debug APK
+        shell: pwsh
+        run: |
+          flutter build apk --debug
+
+      - name: Deploy to Phone
+        shell: pwsh
+        run: |
+          # Use adb -d to target the connected physical/wireless device and install the built APK
+          adb -d install -r build/app/outputs/flutter-apk/app-debug.apk

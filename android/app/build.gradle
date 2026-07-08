@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -38,7 +39,7 @@ android {
     defaultConfig {
         applicationId "com.surethingnet.stn"
         // minSdkVersion 23 is recommended for Firebase and mobile_scanner stability
-        minSdk 23
+        minSdkVersion flutter.minSdkVersion
         targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -60,5 +61,4 @@ dependencies {
     // Add Firebase dependencies if needed, or rely on flutter plugins (which manage their own native dependencies)
 }
 
-// Apply Google Services plugin for Firebase configuration
-apply plugin: 'com.google.gms.google-services'
+

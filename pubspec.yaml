@@ -21,6 +21,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   permission_handler: ^11.3.0
   shared_preferences: ^2.2.2
+  url_launcher: ^6.2.5
 
   # Icons & UI helpers
   cupertino_icons: ^1.0.6
